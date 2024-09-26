@@ -2,7 +2,7 @@
 #include <cstdlib>
 using namespace std;
 
-int r = 5, c = 4;
+int r = 5, c = 4; //grid size.
 
 //up - down - left - right.
 int row[] = {-1, 1,  0, 0};
