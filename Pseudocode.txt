@@ -1,0 +1,62 @@
+Function A_Star(Graph G, Node start, Node goal):
+    Input:
+        G -> Graph with nodes and edges
+        start -> Starting node
+        goal -> Goal node
+    Output:
+        Path -> The optimal path from start to goal (or empty if no path)
+
+    # Initialize open and closed sets
+    openSet = priority queue (min-heap), initialized with start node
+    closedSet = empty set
+
+    # Initialize gScore and fScore for all nodes
+    gScore = map of node to cost, initialized with infinity for all nodes
+    gScore[start] = 0  # Cost of the start node is 0
+
+    fScore = map of node to estimated total cost (g + h), initialized with infinity for all nodes
+    fScore[start] = heuristic(start, goal)  # fScore is g + h (here h is the heuristic function)
+
+    # Initialize a map to track the best path
+    cameFrom = empty map
+
+    While openSet is not empty:
+        # Get the node in openSet with the lowest fScore
+        current = node in openSet with the lowest fScore value
+
+        # If the current node is the goal, reconstruct and return the path
+        If current == goal:
+            Return ReconstructPath(cameFrom, current)
+
+        # Move current node from openSet to closedSet
+        Remove current from openSet
+        Add current to closedSet
+
+        # For each neighbor of the current node
+        For each neighbor in neighbors(current):
+            If neighbor is in closedSet:
+                Continue  # Ignore the neighbor already evaluated
+            
+            # Calculate the tentative gScore for this neighbor
+            tentative_gScore = gScore[current] + distance(current, neighbor)
+
+            If neighbor is not in openSet:
+                Add neighbor to openSet  # Discover a new node
+            
+            If tentative_gScore >= gScore[neighbor]:
+                Continue  # This is not a better path
+            
+            # This path is the best so far, record it
+            cameFrom[neighbor] = current
+            gScore[neighbor] = tentative_gScore
+            fScore[neighbor] = gScore[neighbor] + heuristic(neighbor, goal)
+
+    # If the openSet is empty and goal is not reached
+    Return failure (no path exists)
+
+Function ReconstructPath(cameFrom, current):
+    total_path = [current]
+    While current is in cameFrom:
+        current = cameFrom[current]
+        Prepend current to total_path
+    Return total_path
